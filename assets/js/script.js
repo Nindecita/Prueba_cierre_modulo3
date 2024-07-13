@@ -22,11 +22,12 @@ const convertValue = async function () {
         .map((v) => v.valor)
         .slice(0, 10)
         .reverse();
+      
 
       //console.log(apiValue);
       await resultConvertion(valor, apiValue);
       //console.log(response);
-      await renderChart(days, values);
+      await renderChart(days, values, moneda);
     } else {
       return alert("debe ingresar un valor");
     }
@@ -51,16 +52,21 @@ async function resultConvertion(userValue, apiValue) {
   ).textContent = `El valor convertido es: ${convertedValue.toFixed(2)}`;
 }
 
-async function renderChart(days, values) {
+let chart;
+async function renderChart(days, values, moneda) {
   const ctx = document.getElementById("chart");
+  
+    if (chart) {
+        chart.destroy();
+    }
 
-  new Chart(ctx, {
+  chart = new Chart(ctx, {
     type: "bar",
     data: {
       labels: days,
       datasets: [
         {
-          label: "Valor de cambio en los últimos 10 días",
+          label: `Valor del ${moneda} en los últimos 10 días`,
           data: values,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
